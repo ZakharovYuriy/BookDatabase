@@ -9,8 +9,17 @@
             "request": "launch",
             "name": "Launch BookDB",
             "program": "${workspaceFolder}/build/BookDB",
-            "args": [
-            ],
+            "args": [],
+            "cwd": "${workspaceFolder}/build",
+            "preLaunchTask": "GCC: Build Debug app",
+            "initCommands": ["settings set target.disable-aslr false"]
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Launch BookDB Tests",
+            "program": "${workspaceFolder}/build/BookDB_tests",
+            "args": [],
             "cwd": "${workspaceFolder}/build",
             "preLaunchTask": "GCC: Build Debug app",
             "initCommands": ["settings set target.disable-aslr false"]
