@@ -24,7 +24,7 @@ public:
     using iterator = typename BookContainer::iterator;
     using const_iterator = typename BookContainer::const_iterator;
 
-    using AuthorContainer = std::unordered_set<std::string, TransparentStringHash, TransparentStringEqual>;
+    using AuthorContainer = std::unordered_set<std::string_view, TransparentStringHash, TransparentStringEqual>;
 
     using author_value_type = typename AuthorContainer::value_type;
     using author_iterator = typename AuthorContainer::iterator;
@@ -65,18 +65,18 @@ public:
 
     void PushBack(const Book &b) {
         books_.push_back(b);
-        authors_.insert(std::string(b.author));  // сохраняем автора
+        authors_.insert(b.author);  // сохраняем автора
     }
 
     void PushBack(Book &&b) {
-        authors_.insert(std::string(b.author));
+        authors_.insert(b.author);
         books_.push_back(std::move(b));
     }
 
     template <typename... Args>
     reference EmplaceBack(Args &&...args) {
         Book &b = books_.emplace_back(std::forward<Args>(args)...);
-        authors_.insert(std::string(b.author));
+        authors_.insert(b.author);
         return b;
     }
 
@@ -96,10 +96,6 @@ template <>
 struct formatter<bookdb::BookDatabase<std::vector<bookdb::Book>>> {
     template <typename FormatContext>
     auto format(const bookdb::BookDatabase<std::vector<bookdb::Book>> &db, FormatContext &fc) const {
-        /*
-        Раскомментируйте, когда bookdb::BookDatabase поддержит интерфейсы, доступные стандартным контейнерам
-        (size/begin/...)
-
         format_to(fc.out(), "BookDatabase (size = {}): ", db.size());
 
         format_to(fc.out(), "Books:\n");
@@ -111,7 +107,6 @@ struct formatter<bookdb::BookDatabase<std::vector<bookdb::Book>>> {
         for (const auto &author : db.GetAuthors()) {
             format_to(fc.out(), "- {}\n", author);
         }
-        */
         return fc.out();
     }
 

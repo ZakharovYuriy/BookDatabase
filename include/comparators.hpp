@@ -20,8 +20,16 @@ struct LessByGenre {
     bool operator()(const Book &lhs, const Book &rhs) const noexcept { return lhs.genre < rhs.genre; }
 };
 
+struct LessByPopularity {
+    bool operator()(const Book &lhs, const Book &rhs) const noexcept { return lhs.rating < rhs.rating; }
+};
+
 struct GreaterByRating {
     bool operator()(const Book &lhs, const Book &rhs) const noexcept { return lhs.rating > rhs.rating; }
+};
+
+struct LessByRating {
+    bool operator()(const Book &lhs, const Book &rhs) const noexcept { return lhs.rating < rhs.rating; }
 };
 
 struct GreaterByReadCount {
