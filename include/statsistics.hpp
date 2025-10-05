@@ -68,10 +68,11 @@ template <BookIterator BookIt>
 
 template <BookContainerLike T>
 [[nodiscard]] double calculateAverageRating(const BookDatabase<T> &cont) {
-    const auto &ratings = calculateGenreRatings(cont.begin(), cont.end());
+    if (cont.empty())
+        return 0;
     double sumRating = 0;
-    for (const auto &[genre, rating] : ratings) {
-        sumRating += rating;
+    for (const auto &book : cont) {
+        sumRating += book.rating;
     };
     return sumRating / cont.size();
 }
@@ -93,7 +94,7 @@ template <BookContainerLike T, BookComparator Comporator>
     return result;
 }
 
-template <BookContainerLike T, BookComparator Comporator>
+template <BookContainerLike T>
 [[nodiscard]] std::vector<std::reference_wrapper<const Book>> sampleRandomBooks(BookDatabase<T> &cont,
                                                                                 std::size_t count = 3) {
     std::vector<std::reference_wrapper<const Book>> result;
