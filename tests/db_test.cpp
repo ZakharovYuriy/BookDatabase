@@ -24,8 +24,8 @@ TEST(BookDatabaseTest, InitializerListConstructor) {
                       {"Tolkien", "The Hobbit", 1937, Genre::Fiction, 4.8, 2000}};
 
     EXPECT_EQ(db.size(), 2);
-    EXPECT_TRUE(db.GetAuthors().contains(std::string_view("Orwell")));
-    EXPECT_TRUE(db.GetAuthors().contains(std::string_view("Tolkien")));
+    EXPECT_TRUE(db.GetAuthors().contains("Orwell"sv));
+    EXPECT_TRUE(db.GetAuthors().contains("Tolkien"sv));
 }
 
 // PushBack и EmplaceBack
@@ -40,14 +40,14 @@ TEST(BookDatabaseTest, PushBackAndEmplaceBack) {
 
     db.EmplaceBack("Asimov", "Foundation", 1951, Genre::SciFi, 4.6, 3000);
     EXPECT_EQ(db.size(), 2);
-    EXPECT_TRUE(db.GetAuthors().contains(std::string_view("Asimov")));
+    EXPECT_TRUE(db.GetAuthors().contains("Asimov"sv));
 }
 
 // Heterogeneous author lookup
 TEST(BookDatabaseTest, HeterogeneousAuthorLookup) {
     BookDatabase<> db{{"Orwell", "Animal Farm", 1945, Genre::Fiction, 4.8, 1500}};
 
-    EXPECT_TRUE(db.GetAuthors().contains(std::string_view("Orwell")));
+    EXPECT_TRUE(db.GetAuthors().contains("Orwell"sv));
 
     EXPECT_TRUE(db.GetAuthors().contains("Orwell"));
 
@@ -264,7 +264,10 @@ TEST_F(BookDbFixture, SampleRandomBooks_TypicalCase_UniqueAndFromContainer) {
                 break;
             }
         }
-        EXPECT_TRUE(found_same_address);
+
+        if (!found_same_address) {
+            FAIL() << "Found sampled book whose address does not match any element in db: " << p->title;
+        }
     }
     EXPECT_EQ(ptrs.size(), k);  // unique
 }

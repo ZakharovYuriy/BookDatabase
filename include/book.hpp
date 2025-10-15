@@ -1,24 +1,24 @@
 #pragma once
 
+#include <flat_map>
 #include <format>
 #include <stdexcept>
 #include <string_view>
-#include <unordered_map>
 
 namespace bookdb {
 
 enum class Genre { Fiction, NonFiction, SciFi, Biography, Mystery, Unknown };
 
-const std::unordered_map<Genre, std::string_view> genresToStr{
+const std::flat_map<Genre, std::string_view> genresToStr{
     {Genre::Fiction, "Fiction"}, {Genre::Mystery, "Mystery"},     {Genre::NonFiction, "NonFiction"},
     {Genre::SciFi, "SciFi"},     {Genre::Biography, "Biography"}, {Genre::Unknown, "Unknown"},
 };
 
-const std::unordered_map<std::string_view, Genre> strToGenres{{"Fiction", Genre::Fiction},
-                                                              {"NonFiction", Genre::NonFiction},
-                                                              {"SciFi", Genre::SciFi},
-                                                              {"Biography", Genre::Biography},
-                                                              {"Mystery", Genre::Mystery}};
+const std::flat_map<std::string_view, Genre> strToGenres{{"Fiction", Genre::Fiction},
+                                                         {"NonFiction", Genre::NonFiction},
+                                                         {"SciFi", Genre::SciFi},
+                                                         {"Biography", Genre::Biography},
+                                                         {"Mystery", Genre::Mystery}};
 
 // Ваш код для constexpr преобразования строк в enum::Genre и наоборот здесь
 

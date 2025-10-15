@@ -103,15 +103,11 @@ template <BookContainerLike T>
 
     int k = std::min<std::size_t>(count, cont.size());
 
-    std::vector<std::reference_wrapper<const Book>> allBooks;
-    allBooks.reserve(cont.size());
-    std::transform(cont.begin(), cont.end(), std::back_inserter(allBooks), [](const Book &b) { return std::cref(b); });
-
     std::random_device rd;
     std::mt19937 gen(rd());
 
     result.reserve(k);
-    std::sample(allBooks.begin(), allBooks.end(), std::back_inserter(result), k, gen);
+    std::sample(cont.begin(), cont.end(), std::back_inserter(result), k, gen);
 
     return result;
 }

@@ -49,12 +49,7 @@ public:
     const_iterator end() const noexcept { return books_.end(); }
     const_iterator cend() const noexcept { return books_.cend(); }
 
-    author_iterator authors_begin() noexcept { return authors_.begin(); }
-    const_author_iterator authors_begin() const noexcept { return authors_.begin(); }
     const_author_iterator authors_cbegin() const noexcept { return authors_.cbegin(); }
-
-    author_iterator authors_end() noexcept { return authors_.end(); }
-    const_author_iterator authors_end() const noexcept { return authors_.end(); }
     const_author_iterator authors_cend() const noexcept { return authors_.cend(); }
 
     // Standard container interface methods
@@ -64,19 +59,19 @@ public:
     }
 
     void PushBack(const Book &b) {
-        books_.push_back(b);
-        authors_.insert(b.author);  // сохраняем автора
+        auto &lastInBook = books_.emplace_back(b);
+        authors_.emplace(lastInBook.author);
     }
 
     void PushBack(Book &&b) {
-        authors_.insert(b.author);
-        books_.push_back(std::move(b));
+        auto &lastInBook = books_.emplace_back(std::move(b));
+        authors_.emplace(lastInBook.author);
     }
 
     template <typename... Args>
     reference EmplaceBack(Args &&...args) {
         Book &b = books_.emplace_back(std::forward<Args>(args)...);
-        authors_.insert(b.author);
+        authors_.emplace(b.author);
         return b;
     }
 
