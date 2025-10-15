@@ -11,6 +11,7 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -270,4 +271,85 @@ TEST_F(BookDbFixture, SampleRandomBooks_TypicalCase_UniqueAndFromContainer) {
         }
     }
     EXPECT_EQ(ptrs.size(), k);  // unique
+}
+
+TEST(BookDatabaseTest, PushBack_CopyAndMove_And_StringViewStability) {
+    using namespace std::literals;
+
+    BookDatabase<std::vector<Book>> db;
+
+    std::string author1 = "Orwell";
+    std::string author2 = "Tolkien";
+
+    // Copy version (const Book&)
+    Book b1{author1, "1984", 1949, Genre::Fiction, 4.8, 100};
+    db.PushBack(b1);
+
+    EXPECT_EQ(db.size(), 1);
+    EXPECT_TRUE(db.GetAuthors().contains("Orwell"sv));
+    EXPECT_EQ(db.begin()->author, "Orwell"sv);
+
+    // Move version (Book&&)
+    Book b2{author2, "The Hobbit", 1937, Genre::Fiction, 4.9, 200};
+    db.PushBack(std::move(b2));
+
+    EXPECT_EQ(db.size(), 2);
+    EXPECT_TRUE(db.GetAuthors().contains("Tolkien"sv));
+    EXPECT_EQ(std::next(db.begin())->author, "Tolkien"sv);
+
+    // Direct construction with EmplaceBack
+    db.EmplaceBack("Rowling", "Harry Potter", 1997, Genre::Fiction, 4.7, 5000);
+    EXPECT_EQ(db.size(), 3);
+    EXPECT_TRUE(db.GetAuthors().contains("Rowling"sv));
+
+    // Check that string_view remains valid after source strings change
+    author1 = "Changed_1";
+    author2 = "Changed_2";
+
+    auto books = db.GetBooks();
+    auto authors = db.GetAuthors();
+
+    EXPECT_TRUE(std::any_of(books.begin(), books.end(), [](const Book &b) { return b.author == "Orwell"sv; }));
+    EXPECT_TRUE(std::any_of(books.begin(), books.end(), [](const Book &b) { return b.author == "Tolkien"sv; }));
+
+    // Check that authors are unique
+    EXPECT_EQ(authors.size(), 3);
+    std::unordered_set<std::string_view> unique_authors;
+    for (const auto &b : books)
+        unique_authors.insert(b.author);
+
+    EXPECT_EQ(unique_authors.size(), 3u);
+}
+
+TEST(BookDatabaseTest, PushBack_DoesNotDuplicateAuthors) {
+    using namespace std::literals;
+
+    BookDatabase<std::vector<Book>> db;
+
+    std::string a = "Orwell";
+
+    db.EmplaceBack(a, "1984", 1949, Genre::Fiction, 4.8, 300);
+    db.EmplaceBack(a, "Animal Farm", 1945, Genre::Fiction, 4.7, 250);
+    db.PushBack(Book{a, "Homage to Catalonia", 1938, Genre::Fiction, 4.3, 150});
+
+    // All books belong to the same author
+    EXPECT_EQ(db.GetAuthors().size(), 1u);
+
+    for (const auto &b : db.GetBooks()) {
+        EXPECT_EQ(b.author, *db.GetAuthors().begin());
+    }
+}
+
+TEST(BookDatabaseTest, EmplaceBack_ReturnsReferenceToInsertedBook) {
+    using namespace std::literals;
+
+    BookDatabase<std::vector<Book>> db;
+
+    auto &ref = db.EmplaceBack("Asimov", "Foundation", 1951, Genre::SciFi, 4.6, 3000);
+
+    // Check that the returned reference points to the last inserted element
+    EXPECT_EQ(&ref, &db.GetBooks().back());
+    // Check that book data was correctly set
+    EXPECT_EQ(ref.title, "Foundation"sv);
+    EXPECT_EQ(ref.author, "Asimov"sv);
 }

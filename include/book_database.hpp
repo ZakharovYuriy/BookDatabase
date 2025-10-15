@@ -24,7 +24,7 @@ public:
     using iterator = typename BookContainer::iterator;
     using const_iterator = typename BookContainer::const_iterator;
 
-    using AuthorContainer = std::unordered_set<std::string_view, TransparentStringHash, TransparentStringEqual>;
+    using AuthorContainer = std::unordered_set<std::string, TransparentStringHash, TransparentStringEqual>;
 
     using author_value_type = typename AuthorContainer::value_type;
     using author_iterator = typename AuthorContainer::iterator;
@@ -59,19 +59,22 @@ public:
     }
 
     void PushBack(const Book &b) {
+        auto [authorIt, emplaced] = authors_.emplace(b.author);
         auto &lastInBook = books_.emplace_back(b);
-        authors_.emplace(lastInBook.author);
+        lastInBook.author = *authorIt;
     }
 
     void PushBack(Book &&b) {
+        auto [authorIt, emplaced] = authors_.emplace(b.author);
         auto &lastInBook = books_.emplace_back(std::move(b));
-        authors_.emplace(lastInBook.author);
+        lastInBook.author = *authorIt;
     }
 
     template <typename... Args>
     reference EmplaceBack(Args &&...args) {
         Book &b = books_.emplace_back(std::forward<Args>(args)...);
-        authors_.emplace(b.author);
+        auto [authorIt, emplaced] = authors_.emplace(b.author);
+        b.author = *authorIt;
         return b;
     }
 
