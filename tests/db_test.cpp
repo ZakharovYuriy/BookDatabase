@@ -25,8 +25,8 @@ TEST(BookDatabaseTest, InitializerListConstructor) {
                       {"Tolkien", "The Hobbit", 1937, Genre::Fiction, 4.8, 2000}};
 
     EXPECT_EQ(db.size(), 2);
-    EXPECT_TRUE(db.GetAuthors().contains("Orwell"sv));
-    EXPECT_TRUE(db.GetAuthors().contains("Tolkien"sv));
+    EXPECT_TRUE(db.GetAuthors().contains("Orwell"));
+    EXPECT_TRUE(db.GetAuthors().contains("Tolkien"));
 }
 
 // PushBack и EmplaceBack
@@ -41,14 +41,14 @@ TEST(BookDatabaseTest, PushBackAndEmplaceBack) {
 
     db.EmplaceBack("Asimov", "Foundation", 1951, Genre::SciFi, 4.6, 3000);
     EXPECT_EQ(db.size(), 2);
-    EXPECT_TRUE(db.GetAuthors().contains("Asimov"sv));
+    EXPECT_TRUE(db.GetAuthors().contains("Asimov"));
 }
 
 // Heterogeneous author lookup
 TEST(BookDatabaseTest, HeterogeneousAuthorLookup) {
     BookDatabase<> db{{"Orwell", "Animal Farm", 1945, Genre::Fiction, 4.8, 1500}};
 
-    EXPECT_TRUE(db.GetAuthors().contains("Orwell"sv));
+    EXPECT_TRUE(db.GetAuthors().contains("Orwell"));
 
     EXPECT_TRUE(db.GetAuthors().contains("Orwell"));
 
@@ -85,15 +85,15 @@ TEST_F(BookDbFixture, BuildAuthorHistogramFlat_CountsAndKeys) {
     EXPECT_EQ(hist.size(), 9u);
 
     // Orwell — 2 books, all others have 1 each
-    EXPECT_EQ(hist["George Orwell"sv], 2);
-    EXPECT_EQ(hist["F. Scott Fitzgerald"sv], 1);
-    EXPECT_EQ(hist["Harper Lee"sv], 1);
-    EXPECT_EQ(hist["Jane Austen"sv], 1);
-    EXPECT_EQ(hist["J.D. Salinger"sv], 1);
-    EXPECT_EQ(hist["Aldous Huxley"sv], 1);
-    EXPECT_EQ(hist["Charlotte Brontë"sv], 1);
-    EXPECT_EQ(hist["J.R.R. Tolkien"sv], 1);
-    EXPECT_EQ(hist["William Golding"sv], 1);
+    EXPECT_EQ(hist["George Orwell"], 2);
+    EXPECT_EQ(hist["F. Scott Fitzgerald"], 1);
+    EXPECT_EQ(hist["Harper Lee"], 1);
+    EXPECT_EQ(hist["Jane Austen"], 1);
+    EXPECT_EQ(hist["J.D. Salinger"], 1);
+    EXPECT_EQ(hist["Aldous Huxley"], 1);
+    EXPECT_EQ(hist["Charlotte Brontë"], 1);
+    EXPECT_EQ(hist["J.R.R. Tolkien"], 1);
+    EXPECT_EQ(hist["William Golding"], 1);
 }
 
 // calculateGenreRatings
@@ -286,21 +286,21 @@ TEST(BookDatabaseTest, PushBack_CopyAndMove_And_StringViewStability) {
     db.PushBack(b1);
 
     EXPECT_EQ(db.size(), 1);
-    EXPECT_TRUE(db.GetAuthors().contains("Orwell"sv));
-    EXPECT_EQ(db.begin()->author, "Orwell"sv);
+    EXPECT_TRUE(db.GetAuthors().contains("Orwell"));
+    EXPECT_EQ(db.begin()->author, "Orwell");
 
     // Move version (Book&&)
     Book b2{author2, "The Hobbit", 1937, Genre::Fiction, 4.9, 200};
     db.PushBack(std::move(b2));
 
     EXPECT_EQ(db.size(), 2);
-    EXPECT_TRUE(db.GetAuthors().contains("Tolkien"sv));
-    EXPECT_EQ(std::next(db.begin())->author, "Tolkien"sv);
+    EXPECT_TRUE(db.GetAuthors().contains("Tolkien"));
+    EXPECT_EQ(std::next(db.begin())->author, "Tolkien");
 
     // Direct construction with EmplaceBack
     db.EmplaceBack("Rowling", "Harry Potter", 1997, Genre::Fiction, 4.7, 5000);
     EXPECT_EQ(db.size(), 3);
-    EXPECT_TRUE(db.GetAuthors().contains("Rowling"sv));
+    EXPECT_TRUE(db.GetAuthors().contains("Rowling"));
 
     // Check that string_view remains valid after source strings change
     author1 = "Changed_1";
@@ -309,8 +309,8 @@ TEST(BookDatabaseTest, PushBack_CopyAndMove_And_StringViewStability) {
     auto books = db.GetBooks();
     auto authors = db.GetAuthors();
 
-    EXPECT_TRUE(std::any_of(books.begin(), books.end(), [](const Book &b) { return b.author == "Orwell"sv; }));
-    EXPECT_TRUE(std::any_of(books.begin(), books.end(), [](const Book &b) { return b.author == "Tolkien"sv; }));
+    EXPECT_TRUE(std::any_of(books.begin(), books.end(), [](const Book &b) { return b.author == "Orwell"; }));
+    EXPECT_TRUE(std::any_of(books.begin(), books.end(), [](const Book &b) { return b.author == "Tolkien"; }));
 
     // Check that authors are unique
     EXPECT_EQ(authors.size(), 3);
@@ -350,6 +350,6 @@ TEST(BookDatabaseTest, EmplaceBack_ReturnsReferenceToInsertedBook) {
     // Check that the returned reference points to the last inserted element
     EXPECT_EQ(&ref, &db.GetBooks().back());
     // Check that book data was correctly set
-    EXPECT_EQ(ref.title, "Foundation"sv);
-    EXPECT_EQ(ref.author, "Asimov"sv);
+    EXPECT_EQ(ref.title, "Foundation");
+    EXPECT_EQ(ref.author, "Asimov");
 }
