@@ -20,21 +20,17 @@ int main() {
     // Create a book database
     BookDatabase<std::vector<Book>> db;
 
-    /*
-
-    Код закомментирован, чтобы не приводить к ошибке компиляции
-
     // Add some books
-    db.EmplaceBack("1984", "George Orwell", 1949, Genre::SciFi, 4., 190);
-    db.EmplaceBack("Animal Farm", "George Orwell", 1945, Genre::Fiction, 4.4, 143);
-    db.EmplaceBack("The Great Gatsby", "F. Scott Fitzgerald", 1925, Genre::Fiction, 4.5, 120);
-    db.EmplaceBack("To Kill a Mockingbird", "Harper Lee", 1960, Genre::Fiction, 4.8, 156);
-    db.EmplaceBack("Pride and Prejudice", "Jane Austen", 1813, Genre::Fiction, 4.7, 178);
-    db.EmplaceBack("The Catcher in the Rye", "J.D. Salinger", 1951, Genre::Fiction, 4.3, 112);
-    db.EmplaceBack("Brave New World", "Aldous Huxley", 1932, Genre::SciFi, 4.5, 98);
-    db.EmplaceBack("Jane Eyre", "Charlotte Brontë", 1847, Genre::Fiction, 4.6, 110);
-    db.EmplaceBack("The Hobbit", "J.R.R. Tolkien", 1937, Genre::Fiction, 4.9, 203);
-    db.EmplaceBack("Lord of the Flies", "William Golding", 1954, Genre::Fiction, 4.2, 89);
+    db.EmplaceBack("George Orwell", "1984", 1949, Genre::SciFi, 4., 190);
+    db.EmplaceBack("George Orwell", "Animal Farm", 1945, Genre::Fiction, 4.4, 143);
+    db.EmplaceBack("F. Scott Fitzgerald", "The Great Gatsby", 1925, Genre::Fiction, 4.5, 120);
+    db.EmplaceBack("Harper Lee", "To Kill a Mockingbird", 1960, Genre::Fiction, 4.8, 156);
+    db.EmplaceBack("Jane Austen", "Pride and Prejudice", 1813, Genre::Fiction, 4.7, 178);
+    db.EmplaceBack("J.D. Salinger", "The Catcher in the Rye", 1951, Genre::Fiction, 4.3, 112);
+    db.EmplaceBack("Aldous Huxley", "Brave New World", 1932, Genre::SciFi, 4.5, 98);
+    db.EmplaceBack("Charlotte Brontë", "Jane Eyre", 1847, Genre::Fiction, 4.6, 110);
+    db.EmplaceBack("J.R.R. Tolkien", "The Hobbit", 1937, Genre::Fiction, 4.9, 203);
+    db.EmplaceBack("William Golding", "Lord of the Flies", 1954, Genre::Fiction, 4.2, 89);
     std::print("Books: {}\n\n", db);
 
     // Sorts
@@ -69,7 +65,6 @@ int main() {
     if (orwellBookIt != db.end()) {
         std::print("\n\nTransparent lookup by authors. Found Orwell's book: {}\n", *orwellBookIt);
     }
-    */
 
     return 0;
 }
